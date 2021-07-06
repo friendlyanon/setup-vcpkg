@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: ./
+        id: vcpkg
+        with: { committish: 110c89fc6ada7bc9fad715eaf8211f20aad084f5 }
+
+      - run: |
+          printf "Cache hit: '%s'\n" "${{ steps.vcpkg.outputs.cache-hit }}"
+          $VCPKG_ROOT/vcpkg version

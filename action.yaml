@@ -1,0 +1,56 @@
+name: Setup vcpkg
+
+description: Sets vcpkg up in GitHub Actions
+
+author: friendlyanon
+
+branding:
+  icon: package
+  color: blue
+
+inputs:
+  git-url:
+    default: https://github.com/microsoft/vcpkg.git
+    required: false
+    description: URL of the git repository to fetch vcpkg from.
+
+  committish:
+    required: true
+    description: Committish of the vcpkg repository to fetch.
+
+  cache:
+    default: "true"
+    required: false
+    description: Whether to cache the vcpkg folder.
+
+  cache-key:
+    required: false
+    description: >-
+      Cache key to store the vcpkg folder with. Defaults to
+      vcpkg-<os>-<committish> where <os> is the runner.os context value and
+      <committish> is the value passed as the committish input.
+
+  cache-restore-keys:
+    required: false
+    description: >-
+      Cache keys to attempt to restore the vcpkg folder with. Defaults to
+      vcpkg-<os>- where <os> is the runner.os context value.
+
+  path:
+    default: vcpkg
+    required: false
+    description: >-
+      Directory to store vcpkg in. Paths should be relative to the github
+      workspace folder.
+
+outputs:
+  cache-hit:
+    description: >-
+      "true" if the cache could be restored, otherwise "false". If caching was
+      not requested, then this will be an empty string.
+
+runs:
+  using: node12
+  main: dist/main.js
+  post: dist/post.js
+  post-if: success()
