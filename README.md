@@ -2,7 +2,7 @@
 
 This is a GitHub action that sets vcpkg up in GitHub Actions and caches it.
 
-See the [actions.yaml](actions.yaml) file for inputs and outputs.
+See the [action.yaml](action.yaml) file for inputs and outputs.
 
 ## Example usage
 
