@@ -5,11 +5,6 @@ import { paths } from "./paths";
 
 async function main() {
   try {
-    if (core.getState(States.cacheHit) === "1") {
-      core.info("Cache hit");
-      return;
-    }
-
     if (core.getState(States.cache) === "") {
       core.info("Cache is disabled");
       return;

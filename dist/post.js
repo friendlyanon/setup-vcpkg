@@ -74972,10 +74972,6 @@ const paths = (path) => [
 
 async function main() {
   try {
-    if (core$8.getState("CACHE_HIT") === "1") {
-      core$8.info("Cache hit");
-      return;
-    }
     if (core$8.getState("CACHE") === "") {
       core$8.info("Cache is disabled");
       return;

@@ -7,24 +7,23 @@ import { execSync } from "child_process";
 import { URL } from "url";
 import { join } from "path";
 import del from "del";
+import { createHash } from "crypto";
 
 /**
- * @return {string} String corresponding to the runner.os context value
+ * @return {"Windows" | "Linux" | "macOS"} String corresponding to the
+ * runner.os context value
  */
-function getOS() {
-  switch (process.platform) {
-    case "darwin":
-      return "macOS";
-    case "linux":
-      return "Linux";
-    case "win32":
-      return "Windows";
-    default:
-      throw new Error("Unknown OS");
-  }
-}
+const getOS = () => process.env.RUNNER_OS!;
 
 const mkdir = (path: string) => fs.promises.mkdir(path, { recursive: true });
+
+function calculateHash(committish: string) {
+  const sha = process.env.GITHUB_SHA!;
+  const hash = createHash("sha1");
+  hash.update(sha);
+  hash.update(committish);
+  return hash.digest("hex");
+}
 
 const outputCacheHit = "cache-hit";
 
@@ -54,7 +53,7 @@ async function main() {
       core.saveState(States.cache, "1");
 
       const cacheKey = core.getInput(Inputs.cacheKey)
-        || `vcpkg-${getOS()}-${committish}`;
+        || `vcpkg-${getOS()}-${calculateHash(committish)}`;
       core.saveState(States.cacheKey, cacheKey);
 
       const cacheRestoreKeys = core.getInput(Inputs.cacheRestoreKeys)

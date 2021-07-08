@@ -86085,19 +86085,15 @@ del$1.exports.sync = (patterns, {force, dryRun, cwd = process.cwd(), ...options}
 
 var del = del$1.exports;
 
-function getOS() {
-  switch (process.platform) {
-    case "darwin":
-      return "macOS";
-    case "linux":
-      return "Linux";
-    case "win32":
-      return "Windows";
-    default:
-      throw new Error("Unknown OS");
-  }
-}
+const getOS = () => process.env.RUNNER_OS;
 const mkdir = (path) => require$$0__default['default'].promises.mkdir(path, { recursive: true });
+function calculateHash(committish) {
+  const sha = process.env.GITHUB_SHA;
+  const hash = require$$0$6.createHash("sha1");
+  hash.update(sha);
+  hash.update(committish);
+  return hash.digest("hex");
+}
 const outputCacheHit = "cache-hit";
 async function main() {
   try {
@@ -86119,7 +86115,7 @@ async function main() {
     if (core$8.getBooleanInput("cache")) {
       core$8.saveState("CACHE", "1");
       const cacheKey = core$8.getInput("cache-key")
-        || `vcpkg-${getOS()}-${committish}`;
+        || `vcpkg-${getOS()}-${calculateHash(committish)}`;
       core$8.saveState("CACHE_KEY", cacheKey);
       const cacheRestoreKeys = core$8.getInput("cache-restore-keys")
         || `vcpkg-${getOS()}-`;

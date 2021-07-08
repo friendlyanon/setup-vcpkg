@@ -26,9 +26,10 @@ inputs:
   cache-key:
     required: false
     description: >-
-      Cache key to store the vcpkg folder with. Defaults to
-      vcpkg-<os>-<committish> where <os> is the runner.os context value and
-      <committish> is the value passed as the committish input.
+      Cache key to store the vcpkg folder with. Defaults to vcpkg-<os>-<hash>
+      where <os> is the runner.os context value and <hash> is the SHA1 checksum
+      derived from both the github.sha context value and the value passed as
+      the committish input.
 
   cache-restore-keys:
     required: false
