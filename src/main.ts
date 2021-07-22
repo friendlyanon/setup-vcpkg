@@ -52,12 +52,14 @@ async function main() {
     if (core.getBooleanInput(Inputs.cache)) {
       core.saveState(States.cache, "1");
 
+      const cacheVersionInput = core.getInput(Inputs.cacheVersion);
+      const cacheVersion = cacheVersionInput ? `-${cacheVersionInput}` : "";
       const cacheKey = core.getInput(Inputs.cacheKey)
-        || `vcpkg-${getOS()}-${calculateHash(committish)}`;
+        || `vcpkg-${getOS()}${cacheVersion}-${calculateHash(committish)}`;
       core.saveState(States.cacheKey, cacheKey);
 
       const cacheRestoreKeys = core.getInput(Inputs.cacheRestoreKeys)
-        || `vcpkg-${getOS()}-`;
+        || `vcpkg-${getOS()}${cacheVersion}-`;
       const restoreKeys = cacheRestoreKeys.split("\n");
 
       const result = await restoreCache(paths(path), cacheKey, restoreKeys);

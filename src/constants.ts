@@ -4,6 +4,7 @@ export const enum Inputs {
   cache = "cache",
   cacheKey = "cache-key",
   cacheRestoreKeys = "cache-restore-keys",
+  cacheVersion = "cache-version",
   path = "path",
 }
 

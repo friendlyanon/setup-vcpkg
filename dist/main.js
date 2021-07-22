@@ -86114,11 +86114,13 @@ async function main() {
     const committish = core$8.getInput("committish");
     if (core$8.getBooleanInput("cache")) {
       core$8.saveState("CACHE", "1");
+      const cacheVersionInput = core$8.getInput("cache-version");
+      const cacheVersion = cacheVersionInput ? `-${cacheVersionInput}` : "";
       const cacheKey = core$8.getInput("cache-key")
-        || `vcpkg-${getOS()}-${calculateHash(committish)}`;
+        || `vcpkg-${getOS()}${cacheVersion}-${calculateHash(committish)}`;
       core$8.saveState("CACHE_KEY", cacheKey);
       const cacheRestoreKeys = core$8.getInput("cache-restore-keys")
-        || `vcpkg-${getOS()}-`;
+        || `vcpkg-${getOS()}${cacheVersion}-`;
       const restoreKeys = cacheRestoreKeys.split("\n");
       const result = await restoreCache_1(paths(path), cacheKey, restoreKeys);
       if (result != null) {

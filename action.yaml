@@ -37,6 +37,12 @@ inputs:
       Cache keys to attempt to restore the vcpkg folder with. Defaults to
       vcpkg-<os>- where <os> is the runner.os context value.
 
+  cache-version:
+    required: false
+    description: >-
+      A cache buster value that gets appended after the <os> value in the cache
+      key.
+
   path:
     default: vcpkg
     required: false
