@@ -75031,8 +75031,10 @@ async function main() {
           return;
         }
       }
-      core$8.info(`\x1B[36mCache miss ${cacheKey} [${restoreKeys.join(", ")}]\x1B[0m`);
-      core$8.setOutput(outputCacheHit, "false");
+      else {
+        core$8.info(`\x1B[36mCache miss ${cacheKey} [${restoreKeys.join(", ")}]\x1B[0m`);
+        core$8.setOutput(outputCacheHit, "false");
+      }
     }
     else {
       core$8.setOutput(outputCacheHit, "");

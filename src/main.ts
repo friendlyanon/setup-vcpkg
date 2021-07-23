@@ -89,12 +89,12 @@ async function main() {
         if (isWindows) {
           return;
         }
+      } else {
+        core.info(`\x1B[36mCache miss ${
+          cacheKey
+        } [${restoreKeys.join(", ")}]\x1B[0m`);
+        core.setOutput(outputCacheHit, "false");
       }
-
-      core.info(`\x1B[36mCache miss ${
-        cacheKey
-      } [${restoreKeys.join(", ")}]\x1B[0m`);
-      core.setOutput(outputCacheHit, "false");
     } else {
       core.setOutput(outputCacheHit, "");
     }
