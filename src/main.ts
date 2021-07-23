@@ -6,7 +6,6 @@ import fs from "fs";
 import { execSync } from "child_process";
 import { URL } from "url";
 import { join } from "path";
-import del from "del";
 import { createHash } from "crypto";
 
 /**
@@ -48,7 +47,14 @@ async function main() {
     const cachePath = join(execOptions.cwd, ".cache");
     await mkdir(execOptions.cwd);
 
+    const gitUrl = new URL(core.getInput(Inputs.gitUrl));
     const committish = core.getInput(Inputs.committish);
+    execSync(`git clone ${gitUrl} -n .`, execOptions);
+    execSync(`git checkout -q -f ${committish}`, execOptions);
+    await mkdir(cachePath);
+
+    const isWindows = getOS() === "Windows";
+    let cacheHit = false;
     if (core.getBooleanInput(Inputs.cache)) {
       core.saveState(States.cache, "1");
 
@@ -64,35 +70,36 @@ async function main() {
 
       const result = await restoreCache(paths(path), cacheKey, restoreKeys);
       if (result != null) {
-        if (getOS() !== "Windows") {
+        if (!isWindows) {
           execSync("chmod +x vcpkg", execOptions);
         }
-        core.info(`Cache hit ${result}`);
+
+        cacheHit = true;
+        core.info(`\x1B[32mCache hit ${result}\x1B[0m`);
         core.setOutput(outputCacheHit, "true");
         core.saveState(States.cacheHit, "1");
-        await mkdir(cachePath);
-        return;
+
+        if (isWindows) {
+          return;
+        }
       }
 
-      core.info(`Cache miss ${cacheKey} [${restoreKeys.join(", ")}]`);
+      core.info(`\x1B[36mCache miss ${
+        cacheKey
+      } [${restoreKeys.join(", ")}]\x1B[0m`);
       core.setOutput(outputCacheHit, "false");
     } else {
       core.setOutput(outputCacheHit, "");
     }
 
-    const gitUrl = new URL(core.getInput(Inputs.gitUrl));
-    execSync(`git clone ${gitUrl} -n .`, execOptions);
-    execSync(`git checkout -f ${committish}`, execOptions);
-
-    if (getOS() === "Windows") {
-      execSync("bootstrap-vcpkg.bat", execOptions);
-    } else {
-      execSync("chmod +x bootstrap-vcpkg.sh", execOptions);
-      execSync("sh -e bootstrap-vcpkg.sh", execOptions);
+    if (!cacheHit) {
+      if (isWindows) {
+        execSync("bootstrap-vcpkg.bat", execOptions);
+      } else {
+        execSync("chmod +x bootstrap-vcpkg.sh", execOptions);
+        execSync("sh -e bootstrap-vcpkg.sh", execOptions);
+      }
     }
-
-    await del(join(execOptions.cwd, ".git"), { force: true });
-    await mkdir(cachePath);
   } catch (error) {
     core.info(error.stack);
     core.setFailed(String(error));

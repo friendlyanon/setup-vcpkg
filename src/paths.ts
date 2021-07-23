@@ -1,7 +1,5 @@
 export const paths = (path: string) => [
-  `${path}/*`,
-  `!${path}/buildtrees`,
-  `!${path}/downloads`,
-  `!${path}/installed`,
-  `!${path}/packages`,
+  `${path}/vcpkg`,
+  `${path}/vcpkg.exe`,
+  `${path}/.cache`,
 ];

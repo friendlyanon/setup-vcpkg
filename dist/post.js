@@ -74963,11 +74963,9 @@ function saveCache(paths, key, options) {
 var saveCache_1 = cache$1.saveCache = saveCache;
 
 const paths = (path) => [
-  `${path}/*`,
-  `!${path}/buildtrees`,
-  `!${path}/downloads`,
-  `!${path}/installed`,
-  `!${path}/packages`,
+  `${path}/vcpkg`,
+  `${path}/vcpkg.exe`,
+  `${path}/.cache`,
 ];
 
 async function main() {
