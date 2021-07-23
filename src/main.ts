@@ -41,8 +41,15 @@ async function main() {
     const unixPath = getOS() === "Windows"
       ? execOptions.cwd.replace(/\\/ug, "/")
       : execOptions.cwd;
-    core.exportVariable("VCPKG_ROOT", unixPath);
-    core.exportVariable("VCPKG_DEFAULT_BINARY_CACHE", `${unixPath}/.cache`);
+    core.info("Setting env variables:");
+    const entries = [
+      ["VCPKG_ROOT", unixPath],
+      ["VCPKG_DEFAULT_BINARY_CACHE", `${unixPath}/.cache`],
+    ] as const;
+    for (const [key, value] of entries) {
+      core.info(`    ${key}=${value}`);
+      core.exportVariable(key, value);
+    }
 
     const cachePath = join(execOptions.cwd, ".cache");
     await mkdir(execOptions.cwd);
