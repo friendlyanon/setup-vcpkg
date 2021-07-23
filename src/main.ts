@@ -31,6 +31,7 @@ async function main() {
     const path = core.getInput(Inputs.path);
     core.saveState(States.path, path);
 
+    const isWindows = getOS() === "Windows";
     const execOptions = {
       cwd: join(process.env.GITHUB_WORKSPACE!, path),
       stdio: "inherit",
@@ -38,7 +39,7 @@ async function main() {
     core.info(`Path: ${execOptions.cwd}`);
 
     // Use forward slashes even on Windows
-    const unixPath = getOS() === "Windows"
+    const unixPath = isWindows
       ? execOptions.cwd.replace(/\\/ug, "/")
       : execOptions.cwd;
     core.info("Setting env variables:");
@@ -60,7 +61,6 @@ async function main() {
     execSync(`git checkout -q -f ${committish}`, execOptions);
     await mkdir(cachePath);
 
-    const isWindows = getOS() === "Windows";
     let cacheHit = false;
     if (core.getBooleanInput(Inputs.cache)) {
       core.saveState(States.cache, "1");

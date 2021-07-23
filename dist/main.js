@@ -74982,16 +74982,24 @@ async function main() {
   try {
     const path = core$8.getInput("path");
     core$8.saveState("PATH", path);
+    const isWindows = getOS() === "Windows";
     const execOptions = {
       cwd: require$$1$1.join(process.env.GITHUB_WORKSPACE, path),
       stdio: "inherit",
     };
     core$8.info(`Path: ${execOptions.cwd}`);
-    const unixPath = getOS() === "Windows"
+    const unixPath = isWindows
       ? execOptions.cwd.replace(/\\/ug, "/")
       : execOptions.cwd;
-    core$8.exportVariable("VCPKG_ROOT", unixPath);
-    core$8.exportVariable("VCPKG_DEFAULT_BINARY_CACHE", `${unixPath}/.cache`);
+    core$8.info("Setting env variables:");
+    const entries = [
+      ["VCPKG_ROOT", unixPath],
+      ["VCPKG_DEFAULT_BINARY_CACHE", `${unixPath}/.cache`],
+    ];
+    for (const [key, value] of entries) {
+      core$8.info(`  ${key}=${value}`);
+      core$8.exportVariable(key, value);
+    }
     const cachePath = require$$1$1.join(execOptions.cwd, ".cache");
     await mkdir(execOptions.cwd);
     const gitUrl = new Url.URL(core$8.getInput("git-url"));
@@ -74999,7 +75007,6 @@ async function main() {
     require$$1$2.execSync(`git clone ${gitUrl} -n .`, execOptions);
     require$$1$2.execSync(`git checkout -q -f ${committish}`, execOptions);
     await mkdir(cachePath);
-    const isWindows = getOS() === "Windows";
     let cacheHit = false;
     if (core$8.getBooleanInput("cache")) {
       core$8.saveState("CACHE", "1");
