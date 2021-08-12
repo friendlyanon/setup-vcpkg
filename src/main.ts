@@ -24,6 +24,15 @@ function calculateHash(committish: string) {
   return hash.digest("hex");
 }
 
+function useSubmodule(committish: string) {
+  if (committish !== "") {
+    return false;
+  }
+
+  core.info("No committish passed, using git submodule at path");
+  return true;
+}
+
 const outputCacheHit = "cache-hit";
 
 async function main() {
@@ -37,6 +46,9 @@ async function main() {
       stdio: "inherit",
     } as const;
     core.info(`Path: ${execOptions.cwd}`);
+
+    const committish = core.getInput(Inputs.committish);
+    const submodule = useSubmodule(committish);
 
     // Use forward slashes even on Windows
     const unixPath = isWindows
@@ -55,10 +67,11 @@ async function main() {
     const cachePath = join(execOptions.cwd, ".cache");
     await mkdir(execOptions.cwd);
 
-    const gitUrl = new URL(core.getInput(Inputs.gitUrl));
-    const committish = core.getInput(Inputs.committish);
-    execSync(`git clone ${gitUrl} -n .`, execOptions);
-    execSync(`git checkout -q -f ${committish}`, execOptions);
+    if (!submodule) {
+      const gitUrl = new URL(core.getInput(Inputs.gitUrl));
+      execSync(`git clone ${gitUrl} -n .`, execOptions);
+      execSync(`git checkout -q -f ${committish}`, execOptions);
+    }
     await mkdir(cachePath);
 
     let cacheHit = false;

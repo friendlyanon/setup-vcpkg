@@ -15,8 +15,12 @@ inputs:
     description: URL of the git repository to fetch vcpkg from.
 
   committish:
-    required: true
-    description: Committish of the vcpkg repository to fetch.
+    required: false
+    description: >-
+      Committish of the vcpkg repository to fetch. If not passed, then there
+      must be a git submodule at <path>. You may use the <submodules> parameter
+      for the actions/checkout action to check submodules out along with your
+      own repository.
 
   cache:
     default: "true"
@@ -48,7 +52,9 @@ inputs:
     required: false
     description: >-
       Directory to store vcpkg in. Paths should be relative to the github
-      workspace folder.
+      workspace folder. If <committish> is not passed, then this must point at
+      an existing git submodule. See the description of <committish> for
+      details.
 
 outputs:
   cache-hit:

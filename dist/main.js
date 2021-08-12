@@ -74977,6 +74977,13 @@ function calculateHash(committish) {
   hash.update(committish);
   return hash.digest("hex");
 }
+function useSubmodule(committish) {
+  if (committish !== "") {
+    return false;
+  }
+  core$8.info("No committish passed, using git submodule at path");
+  return true;
+}
 const outputCacheHit = "cache-hit";
 async function main() {
   try {
@@ -74988,6 +74995,8 @@ async function main() {
       stdio: "inherit",
     };
     core$8.info(`Path: ${execOptions.cwd}`);
+    const committish = core$8.getInput("committish");
+    const submodule = useSubmodule(committish);
     const unixPath = isWindows
       ? execOptions.cwd.replace(/\\/ug, "/")
       : execOptions.cwd;
@@ -75002,10 +75011,11 @@ async function main() {
     }
     const cachePath = require$$1$1.join(execOptions.cwd, ".cache");
     await mkdir(execOptions.cwd);
-    const gitUrl = new Url.URL(core$8.getInput("git-url"));
-    const committish = core$8.getInput("committish");
-    require$$1$2.execSync(`git clone ${gitUrl} -n .`, execOptions);
-    require$$1$2.execSync(`git checkout -q -f ${committish}`, execOptions);
+    if (!submodule) {
+      const gitUrl = new Url.URL(core$8.getInput("git-url"));
+      require$$1$2.execSync(`git clone ${gitUrl} -n .`, execOptions);
+      require$$1$2.execSync(`git checkout -q -f ${committish}`, execOptions);
+    }
     await mkdir(cachePath);
     let cacheHit = false;
     if (core$8.getBooleanInput("cache")) {

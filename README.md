@@ -7,6 +7,7 @@ See the [action.yaml](action.yaml) file for inputs and outputs.
 ## Example usage
 
     - uses: friendlyanon/setup-vcpkg@v1
+      with: { committish: 63aa65e65b9d2c08772ea15d25fb8fdb0d32e557 }
     
     - name: Run CMake with manifest mode vcpkg
       shell: bash
@@ -22,14 +23,13 @@ Values in angle brackets (`<>`) are inputs.
 * Attempts to restore vcpkg from the cache using `<path>`, `<cache-key>` and
   `<cache-restore-keys>`.
   * If successful, then stop.
-* Clones the `<git-url>` into `<path>` and checks `<committish>` out.
+* If `<committish>` was provided, clones `<git-url>` into `<path>` and checks
+  `<committish>` out. Otherwise, a git submodule must exist at `<path>`.
 * Runs `bootstrap-vcpkg.bat` on Windows or `bootstrap-vcpkg.sh` on *nix
   systems.
-* Deletes the `<path>/.git` directory.
-* Caches `<path>` with the subdirectories `buildtrees`, `downloads`,
-  `installed` and `packages` ignored.
 
-If `<cache>` is set to `false`, then the cache related steps are skipped.
+If `<cache>` is set to `false`, then the cache related steps are skipped. Only
+the executable and binary cache are stored in the GitHub Actions cache.
 
 # License
 [MIT License](LICENSE)
