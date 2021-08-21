@@ -97,7 +97,6 @@ async function main() {
         cacheHit = true;
         core.info(`\x1B[32mCache hit ${result}\x1B[0m`);
         core.setOutput(outputCacheHit, "true");
-        core.saveState(States.cacheHit, "1");
 
         if (isWindows) {
           return;

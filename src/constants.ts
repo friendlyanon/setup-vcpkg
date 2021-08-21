@@ -11,6 +11,5 @@ export const enum Inputs {
 export const enum States {
   cache = "CACHE",
   cacheKey = "CACHE_KEY",
-  cacheHit = "CACHE_HIT",
   path = "PATH",
 }
