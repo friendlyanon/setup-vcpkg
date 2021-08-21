@@ -15,7 +15,9 @@ async function main() {
     await saveCache(cachePaths, cacheKey);
   } catch (error) {
     if (error.name === "ReserveCacheError") {
-      core.warning(error);
+      if (core.getState(States.ignoreReserveCacheError) === "") {
+        core.warning(error);
+      }
       return;
     }
 

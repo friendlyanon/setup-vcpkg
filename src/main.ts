@@ -39,6 +39,9 @@ async function main() {
   try {
     const path = core.getInput(Inputs.path);
     core.saveState(States.path, path);
+    if (core.getBooleanInput(Inputs.ignoreReserveCacheError)) {
+      core.saveState(States.ignoreReserveCacheError, "1");
+    }
 
     const isWindows = getOS() === "Windows";
     const execOptions = {

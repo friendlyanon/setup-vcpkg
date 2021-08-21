@@ -56,6 +56,13 @@ inputs:
       an existing git submodule. See the description of <committish> for
       details.
 
+  ignore-reserve-cache-error:
+    default: "false"
+    description: >-
+      ReserveCacheError errors will not be reported. This error happens when
+      the cache keys are not defined per job and multiple jobs want to write
+      back to the same cache key. Use this only if you know what you are doing.
+
 outputs:
   cache-hit:
     description: >-
