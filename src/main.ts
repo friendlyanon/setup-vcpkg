@@ -79,7 +79,9 @@ async function main() {
 
     let cacheHit = false;
     if (core.getBooleanInput(Inputs.cache)) {
-      core.saveState(States.cache, "1");
+      if (!core.getBooleanInput(Inputs.skipSave)) {
+        core.saveState(States.cache, "1");
+      }
 
       const cacheVersionInput = core.getInput(Inputs.cacheVersion);
       const cacheVersion = cacheVersionInput ? `-${cacheVersionInput}` : "";

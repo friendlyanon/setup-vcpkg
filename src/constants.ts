@@ -7,6 +7,7 @@ export const enum Inputs {
   cacheVersion = "cache-version",
   path = "path",
   ignoreReserveCacheError = "ignore-reserve-cache-error",
+  skipSave = "skip-save",
 }
 
 export const enum States {

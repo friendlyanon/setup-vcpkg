@@ -63,6 +63,10 @@ inputs:
       the cache keys are not defined per job and multiple jobs want to write
       back to the same cache key. Use this only if you know what you are doing.
 
+  skip-save:
+    default: "false"
+    description: Disables the cache saving post step if true.
+
 outputs:
   cache-hit:
     description: >-
