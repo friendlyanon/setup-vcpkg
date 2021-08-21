@@ -74980,7 +74980,9 @@ async function main() {
   }
   catch (error) {
     if (error.name === "ReserveCacheError") {
-      core$8.warning(error);
+      if (core$8.getState("IGNORE_RESERVE_CACHE_ERROR") === "") {
+        core$8.warning(error);
+      }
       return;
     }
     core$8.info(error.stack);

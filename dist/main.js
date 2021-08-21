@@ -74989,6 +74989,9 @@ async function main() {
   try {
     const path = core$8.getInput("path");
     core$8.saveState("PATH", path);
+    if (core$8.getBooleanInput("ignore-reserve-cache-error")) {
+      core$8.saveState("IGNORE_RESERVE_CACHE_ERROR", "1");
+    }
     const isWindows = getOS() === "Windows";
     const execOptions = {
       cwd: require$$1$1.join(process.env.GITHUB_WORKSPACE, path),
@@ -75019,7 +75022,9 @@ async function main() {
     await mkdir(cachePath);
     let cacheHit = false;
     if (core$8.getBooleanInput("cache")) {
-      core$8.saveState("CACHE", "1");
+      if (!core$8.getBooleanInput("skip-save")) {
+        core$8.saveState("CACHE", "1");
+      }
       const cacheVersionInput = core$8.getInput("cache-version");
       const cacheVersion = cacheVersionInput ? `-${cacheVersionInput}` : "";
       const cacheKey = core$8.getInput("cache-key")
@@ -75036,7 +75041,6 @@ async function main() {
         cacheHit = true;
         core$8.info(`\x1B[32mCache hit ${result}\x1B[0m`);
         core$8.setOutput(outputCacheHit, "true");
-        core$8.saveState("CACHE_HIT", "1");
         if (isWindows) {
           return;
         }
