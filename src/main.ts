@@ -124,8 +124,9 @@ async function main() {
         execSync("sh -e bootstrap-vcpkg.sh", execOptions);
       }
     }
-  } catch (error) {
-    core.info(error.stack);
+  } catch (e) {
+    const error = e as Error;
+    core.info(String(error.stack));
     core.setFailed(String(error));
     process.exitCode = 1;
   }

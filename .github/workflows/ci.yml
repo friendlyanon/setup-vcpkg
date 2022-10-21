@@ -14,7 +14,7 @@ jobs:
 
       - uses: ./
         id: vcpkg
-        with: { committish: 7e3dcf74e37034eea358934a90a11d618520e139 }
+        with: { committish: 934a99dc13cabb330824ae1a5ab4a53a9acc5a49 }
 
       - run: |
           printf "Cache hit: '%s'\n" "${{ steps.vcpkg.outputs.cache-hit }}"

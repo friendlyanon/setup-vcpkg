@@ -13,7 +13,8 @@ async function main() {
     const cacheKey = core.getState(States.cacheKey);
     const cachePaths = paths(core.getState(States.path));
     await saveCache(cachePaths, cacheKey);
-  } catch (error) {
+  } catch (e) {
+    const error = e as Error;
     if (error.name === "ReserveCacheError") {
       if (core.getState(States.ignoreReserveCacheError) === "") {
         core.warning(error);
@@ -21,7 +22,7 @@ async function main() {
       return;
     }
 
-    core.info(error.stack);
+    core.info(String(error.stack));
     core.setFailed(String(error));
     process.exitCode = 1;
   }

@@ -74,7 +74,7 @@ outputs:
       not requested, then this will be an empty string.
 
 runs:
-  using: node12
+  using: node16
   main: dist/main.js
   post: dist/post.js
   post-if: success()
