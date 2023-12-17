@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - uses: ./
         id: vcpkg
-        with: { committish: 934a99dc13cabb330824ae1a5ab4a53a9acc5a49 }
+        with: { committish: "0e47c1985273129e4d0ee52ff73bed9125555de8" }
 
       - run: |
-          printf "Cache hit: '%s'\n" "${{ steps.vcpkg.outputs.cache-hit }}"
+          printf $'Cache hit: \'%s\'\nVCPKG_DEFAULT_BINARY_CACHE: \'%s\'\n' \
+            "${{ steps.vcpkg.outputs.cache-hit }}" \
+            "$VCPKG_DEFAULT_BINARY_CACHE"
           $VCPKG_ROOT/vcpkg version

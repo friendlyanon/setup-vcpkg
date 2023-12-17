@@ -18,6 +18,7 @@ async function main() {
       const file = join(dist, dirent.name);
       const content = (await readFile(file, "utf8"))
         .replace("  return v4();", "  return uuid.v4();")
+        .replace("v4: v4$3,", "v4: v4$2,")
         .replace(regex, replacer);
       await writeFile(file, content);
     }
