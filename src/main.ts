@@ -43,6 +43,10 @@ async function main() {
       core.saveState(States.ignoreReserveCacheError, "1");
     }
 
+    if (core.getBooleanInput(Inputs.saveAlways)) {
+      core.exportVariable("SETUP_VCPKG_SAVE_ALWAYS", "true");
+    }
+
     const isWindows = getOS() === "Windows";
     const execOptions = {
       cwd: join(process.env.GITHUB_WORKSPACE!, path),

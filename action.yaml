@@ -69,7 +69,10 @@ inputs:
 
   save-always:
     default: "false"
-    description: Always run the "post" script to save whatever is in the cache.
+    description: >-
+      Always run the "post" script to save whatever is in the cache, unless the
+      <skip-save> option is true, in which case the "post" script continues to
+      do nothing.
 
 outputs:
   cache-hit:
@@ -81,4 +84,4 @@ runs:
   using: node20
   main: dist/main.js
   post: dist/post.js
-  post-if: github.event.inputs.save-always || success()
+  post-if: success() || env.SETUP_VCPKG_SAVE_ALWAYS == 'true'

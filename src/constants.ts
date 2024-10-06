@@ -8,6 +8,7 @@ export const enum Inputs {
   path = "path",
   ignoreReserveCacheError = "ignore-reserve-cache-error",
   skipSave = "skip-save",
+  saveAlways = "save-always",
 }
 
 export const enum States {

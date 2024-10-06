@@ -166569,6 +166569,9 @@ async function main() {
     if (coreExports.getBooleanInput("ignore-reserve-cache-error")) {
       coreExports.saveState("IGNORE_RESERVE_CACHE_ERROR", "1");
     }
+    if (coreExports.getBooleanInput("save-always")) {
+      coreExports.exportVariable("SETUP_VCPKG_SAVE_ALWAYS", "true");
+    }
     const isWindows = getOS() === "Windows";
     const execOptions = {
       cwd: require$$1$4.join(process.env.GITHUB_WORKSPACE, path),
