@@ -67,6 +67,10 @@ inputs:
     default: "false"
     description: Disables the cache saving post step if true.
 
+  save-always:
+    default: "false"
+    description: Always run the "post" script to save whatever is in the cache.
+
 outputs:
   cache-hit:
     description: >-
@@ -77,4 +81,4 @@ runs:
   using: node20
   main: dist/main.js
   post: dist/post.js
-  post-if: success()
+  post-if: github.event.inputs.save-always || success()
