@@ -23,24 +23,3 @@ jobs:
             "${{ steps.vcpkg.outputs.cache-hit }}" \
             "$VCPKG_DEFAULT_BINARY_CACHE"
           $VCPKG_ROOT/vcpkg version
-
-  build-save-always:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./
-        id: vcpkg
-        with:
-          committish: "7adc2e4d49e8d0efc07a369079faa6bc3dbb90f3"
-          cache-version: save-always
-          save-always: true
-
-      - run: |
-          printf $'Cache hit: \'%s\'\nVCPKG_DEFAULT_BINARY_CACHE: \'%s\'\n' \
-            "${{ steps.vcpkg.outputs.cache-hit }}" \
-            "$VCPKG_DEFAULT_BINARY_CACHE"
-          $VCPKG_ROOT/vcpkg version
-
-      - run: "false"
