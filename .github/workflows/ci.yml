@@ -15,7 +15,7 @@ jobs:
       - uses: ./
         id: vcpkg
         with:
-          committish: "7adc2e4d49e8d0efc07a369079faa6bc3dbb90f3"
+          committish: "96b5ced82828ecaf67e6010a892c98d3e96ed1c2"
           cache-version: default
 
       - run: |

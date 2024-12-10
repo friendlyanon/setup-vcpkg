@@ -3,9 +3,9 @@
 const { readFile, readdir, writeFile } = require("fs").promises;
 const { join } = require("path");
 
-const replacements = ["\n", "  "];
-const regex = / {4}|\x0D\x0A/g;
-const replacer = (match) => replacements[match.length >> 2];
+const replacements = ["  ", "\n"];
+const regex = /\t|\x0D\x0A/g;
+const replacer = (match) => replacements[match.length - 1];
 
 async function main() {
   const dist = join(__dirname, "dist");
@@ -16,10 +16,7 @@ async function main() {
   for (const dirent of dirents) {
     if (dirent.isFile()) {
       const file = join(dist, dirent.name);
-      const content = (await readFile(file, "utf8"))
-        .replace("  return v4();", "  return uuid.v4();")
-        .replace("v4: v4$3,", "v4: v4$2,")
-        .replace(regex, replacer);
+      const content = (await readFile(file, "utf8")).replace(regex, replacer);
       await writeFile(file, content);
     }
   }
