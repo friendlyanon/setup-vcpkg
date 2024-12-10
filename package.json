@@ -1,6 +1,6 @@
 {
   "name": "setup-vcpkg",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "scripts": {
     "build": "npx rollup -c && node format.js"
   },
