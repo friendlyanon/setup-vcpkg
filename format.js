@@ -4,8 +4,14 @@ const { readFile, readdir, writeFile } = require("fs").promises;
 const { join } = require("path");
 
 const replacements = ["  ", "\n"];
-const regex = /\t|\x0D\x0A/g;
-const replacer = (match) => replacements[match.length - 1];
+const regex = /\t|\x0D\x0A|\x0A((?:    )+)/g;
+const replacer = (match, spaces) => {
+  if (spaces != null) {
+    return match.slice(0, (spaces.length >> 1) + 1);
+  }
+
+  return replacements[match.length - 1];
+};
 
 async function main() {
   const dist = join(__dirname, "dist");
